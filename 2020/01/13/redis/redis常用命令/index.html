@@ -8,13 +8,15 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>redis常用命令 | Hexo个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
+  <meta name="description" content="一、redis启动：    本地启动：redis-cli    远程启动：redis-cli -h host -p port -a password Redis 连接命令   AUTH password验证密码是否正确   ECHO message打印字符串   PING查看服务是否运行   QUIT关闭当前连接   SELECT index切换到指定的数据库 二、redis keys命令 1、D">
+<meta property="og:type" content="article">
 <meta property="og:title" content="redis常用命令">
 <meta property="og:url" content="http://yoursite.com/2020/01/13/redis/redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html">
 <meta property="og:site_name" content="Hexo个人博客">
+<meta property="og:description" content="一、redis启动：    本地启动：redis-cli    远程启动：redis-cli -h host -p port -a password Redis 连接命令   AUTH password验证密码是否正确   ECHO message打印字符串   PING查看服务是否运行   QUIT关闭当前连接   SELECT index切换到指定的数据库 二、redis keys命令 1、D">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-01-13T13:53:08.000Z">
-<meta property="article:modified_time" content="2020-01-13T13:53:08.891Z">
+<meta property="article:modified_time" content="2020-01-13T14:01:21.324Z">
 <meta property="article:author" content="秦朗">
 <meta name="twitter:card" content="summary">
   
@@ -172,7 +174,59 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>一、redis启动：<br>    本地启动：redis-cli<br>    远程启动：redis-cli -h host -p port -a password</p>
+<p>Redis 连接命令<br>   AUTH password<br>验证密码是否正确<br>   ECHO message<br>打印字符串<br>   PING<br>查看服务是否运行<br>   QUIT<br>关闭当前连接<br>   SELECT index<br>切换到指定的数据库</p>
+<p>二、redis keys命令</p>
+<p>1、DEL key<br>DUMP key<br>序列化给定的key并返回序列化的值</p>
+<p>2、EXISTS key<br>检查给定的key是否存在</p>
+<p>3、EXPIRE key seconds<br>为key设置过期时间</p>
+<p>4、EXPIRE key timestamp<br>用时间戳的方式给key设置过期时间</p>
+<p>5、PEXPIRE key milliseconds<br>设置key的过期时间以毫秒计</p>
+<p>6、KEYS pattern<br>查找所有符合给定模式的key</p>
+<p>7、MOVE key db<br>将当前数据库的key移动到数据库db当中</p>
+<p>8、PERSIST key<br>移除key的过期时间，key将持久保存</p>
+<p>9、PTTL key<br>以毫秒为单位返回key的剩余过期时间</p>
+<p>10、TTL key<br>以秒为单位，返回给定key的剩余生存时间</p>
+<p>11、RANDOMKEY<br>从当前数据库中随机返回一个key</p>
+<p>12、RENAME key newkey<br>修改key的名称</p>
+<p>13、RENAMENX key newkey<br>仅当newkey不存在时，将key改名为newkey</p>
+<p>14、TYPE key<br>返回key所存储的值的类型</p>
+<p>三、reids字符串命令</p>
+<p>1、SET key value</p>
+<p>2、GET key</p>
+<p>3、GETRANGE key start end<br>返回key中字符串值的子字符</p>
+<p>4、GETSET key value<br>将给定key的值设为value，并返回key的旧值</p>
+<p>5、GETBIT KEY OFFSET<br>对key所储存的字符串值，获取指定偏移量上的位</p>
+<p>6、MGET KEY1 KEY2<br>获取一个或者多个给定key的值</p>
+<p>7、SETBIT KEY OFFSET VALUE<br>对key所是存储的字符串值，设置或清除指定偏移量上的位</p>
+<p>8、SETEX key seconds value<br>将值 value 关联到 key ，并将 key 的过期时间设为 seconds (以秒为单位)。</p>
+<p>9、SETNX key value<br>只有在 key 不存在时设置 key 的值。</p>
+<p>10、SETRANGE key offset value<br>用 value 参数覆写给定 key 所储存的字符串值，从偏移量 offset 开始。</p>
+<p>11、STRLEN key<br>返回 key 所储存的字符串值的长度。</p>
+<p>12、MSET key value [key value …]<br>同时设置一个或多个 key-value 对。</p>
+<p>13、MSETNX key value [key value …]<br>同时设置一个或多个 key-value 对，当且仅当所有给定 key 都不存在。</p>
+<p>14、PSETEX key milliseconds value<br>这个命令和 SETEX 命令相似，但它以毫秒为单位设置 key 的生存时间，而不是像 SETEX 命令那样，以秒为单位。</p>
+<p>15、INCR key<br>将 key 中储存的数字值增一。</p>
+<p>16、INCRBY key increment<br>将 key 所储存的值加上给定的增量值（increment） 。</p>
+<p>17、INCRBYFLOAT key increment<br>将 key 所储存的值加上给定的浮点增量值（increment） 。</p>
+<p>18、DECR key<br>将 key 中储存的数字值减一。</p>
+<p>19、DECRBY key decrement<br>key 所储存的值减去给定的减量值（decrement） 。</p>
+<p>20、APPEND key value<br>如果 key 已经存在并且是一个字符串， APPEND 命令将 指定value 追加到改 key 原来的值（value）的末尾。</p>
+<p>四、Redis hash 命令<br>   HDEL key field1 [field2]<br>删除一个或多个哈希表字段<br>   HEXISTS key field<br>查看哈希表 key 中，指定的字段是否存在。<br>   HGET key field<br>获取存储在哈希表中指定字段的值。<br>   HGETALL key<br>获取在哈希表中指定 key 的所有字段和值<br>   HINCRBY key field increment<br>为哈希表 key 中的指定字段的整数值加上增量 increment 。<br>   HINCRBYFLOAT key field increment<br>为哈希表 key 中的指定字段的浮点数值加上增量 increment 。<br>   HKEYS key<br>获取所有哈希表中的字段<br>   HLEN key<br>获取哈希表中字段的数量<br>   HMGET key field1 [field2]<br>获取所有给定字段的值<br>   HMSET key field1 value1 [field2 value2 ]<br>同时将多个 field-value (域-值)对设置到哈希表 key 中。<br>   HSET key field value<br>将哈希表 key 中的字段 field 的值设为 value 。<br>   HSETNX key field value<br>只有在字段 field 不存在时，设置哈希表字段的值。<br>   HVALS key<br>获取哈希表中所有值<br>   HSCAN key cursor [MATCH pattern] [COUNT count]<br>迭代哈希表中的键值对。</p>
+<p>五、Redis 列表命令<br>   BLPOP key1 [key2 ] timeout<br>移出并获取列表的第一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。<br>   BRPOP key1 [key2 ] timeout<br>移出并获取列表的最后一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。<br>   BRPOPLPUSH source destination timeout<br>从列表中弹出一个值，将弹出的元素插入到另外一个列表中并返回它； 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。<br>   LINDEX key index<br>通过索引获取列表中的元素<br>   LINSERT key BEFORE|AFTER pivot value<br>在列表的元素前或者后插入元素<br>   LLEN key<br>获取列表长度<br>   LPOP key<br>移出并获取列表的第一个元素<br>   LPUSH key value1 [value2]<br>将一个或多个值插入到列表头部<br>   LPUSHX key value<br>将一个值插入到已存在的列表头部<br>   LRANGE key start stop<br>获取列表指定范围内的元素<br>   LREM key count value<br>移除列表元素<br>   LSET key index value<br>通过索引设置列表元素的值<br>   LTRIM key start stop<br>对一个列表进行修剪(trim)，就是说，让列表只保留指定区间内的元素，不在指定区间之内的元素都将被删除。<br>   RPOP key<br>移除并获取列表最后一个元素<br>   RPOPLPUSH source destination<br>移除列表的最后一个元素，并将该元素添加到另一个列表并返回<br>   RPUSH key value1 [value2]<br>在列表中添加一个或多个值<br>   RPUSHX key value<br>为已存在的列表添加值</p>
+<p>六、Redis 集合命令<br>   SADD key member1 [member2]<br>向集合添加一个或多个成员<br>   SCARD key<br>获取集合的成员数<br>   SDIFF key1 [key2]<br>返回给定所有集合的差集<br>   SDIFFSTORE destination key1 [key2]<br>返回给定所有集合的差集并存储在 destination 中<br>   SINTER key1 [key2]<br>返回给定所有集合的交集<br>   SINTERSTORE destination key1 [key2]<br>返回给定所有集合的交集并存储在 destination 中<br>   SISMEMBER key member<br>判断 member 元素是否是集合 key 的成员<br>   SMEMBERS key<br>返回集合中的所有成员<br>   SMOVE source destination member<br>将 member 元素从 source 集合移动到 destination 集合<br>   SPOP key<br>移除并返回集合中的一个随机元素<br>   SRANDMEMBER key [count]<br>返回集合中一个或多个随机数<br>   SREM key member1 [member2]<br>移除集合中一个或多个成员<br>   SUNION key1 [key2]<br>返回所有给定集合的并集<br>   SUNIONSTORE destination key1 [key2]<br>所有给定集合的并集存储在 destination 集合中<br>   SSCAN key cursor [MATCH pattern] [COUNT count]<br>迭代集合中的元素</p>
+<p>七、Redis 有序集合命令<br>   ZADD key score1 member1 [score2 member2]<br>向有序集合添加一个或多个成员，或者更新已存在成员的分数<br>   ZCARD key<br>获取有序集合的成员数<br>   ZCOUNT key min max<br>计算在有序集合中指定区间分数的成员数<br>   ZINCRBY key increment member<br>有序集合中对指定成员的分数加上增量 increment<br>   ZINTERSTORE destination numkeys key [key …]<br>计算给定的一个或多个有序集的交集并将结果集存储在新的有序集合 key 中<br>   ZLEXCOUNT key min max<br>在有序集合中计算指定字典区间内成员数量<br>   ZRANGE key start stop [WITHSCORES]<br>通过索引区间返回有序集合成指定区间内的成员<br>   ZRANGEBYLEX key min max [LIMIT offset count]<br>通过字典区间返回有序集合的成员<br>   ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT]<br>通过分数返回有序集合指定区间内的成员<br>   ZRANK key member<br>返回有序集合中指定成员的索引<br>   ZREM key member [member …]<br>移除有序集合中的一个或多个成员<br>   ZREMRANGEBYLEX key min max<br>移除有序集合中给定的字典区间的所有成员<br>   ZREMRANGEBYRANK key start stop<br>移除有序集合中给定的排名区间的所有成员<br>   ZREMRANGEBYSCORE key min max<br>移除有序集合中给定的分数区间的所有成员<br>   ZREVRANGE key start stop [WITHSCORES]<br>返回有序集中指定区间内的成员，通过索引，分数从高到底<br>   ZREVRANGEBYSCORE key max min [WITHSCORES]<br>返回有序集中指定分数区间内的成员，分数从高到低排序<br>   ZREVRANK key member<br>返回有序集合中指定成员的排名，有序集成员按分数值递减(从大到小)排序<br>   ZSCORE key member<br>返回有序集中，成员的分数值<br>   ZUNIONSTORE destination numkeys key [key …]<br>计算给定的一个或多个有序集的并集，并存储在新的 key 中<br>   ZSCAN key cursor [MATCH pattern] [COUNT count]<br>迭代有序集合中的元素（包括元素成员和元素分值）</p>
+<p>八、Redis 发布订阅命令<br>   PSUBSCRIBE pattern [pattern …]<br>订阅一个或多个符合给定模式的频道。<br>   PUBSUB subcommand [argument [argument …]]<br>查看订阅与发布系统状态。<br>   PUBLISH channel message<br>将信息发送到指定的频道。<br>   PUNSUBSCRIBE [pattern [pattern …]]<br>退订所有给定模式的频道。<br>   SUBSCRIBE channel [channel …]<br>订阅给定的一个或多个频道的信息。<br>   UNSUBSCRIBE [channel [channel …]]<br>指退订给定的频道。</p>
+<p>示例：<br>redis 127.0.0.1:6379&gt; SUBSCRIBE redisChat</p>
+<p>Reading messages… (press Ctrl-C to quit)</p>
+<p>1) “subscribe”<br>2) “redisChat”<br>3) (integer) 1</p>
+<p>现在，我们先重新开启个 redis 客户端，然后在同一个频道 redisChat 发布两次消息，订阅者就能接收到消息。<br>redis 127.0.0.1:6379&gt; PUBLISH redisChat “Redis is a great caching technique”</p>
+<p>(integer) 1</p>
+<h1 id="订阅者的客户端会显示如下消息"><a href="#订阅者的客户端会显示如下消息" class="headerlink" title="订阅者的客户端会显示如下消息"></a>订阅者的客户端会显示如下消息</h1><p>1) “message”<br>2) “redisChat”<br>3) “Redis is a great caching technique”</p>
+<p>九、Redis 事务命令<br>   DISCARD<br>取消事务，放弃执行事务块内的所有命令。<br>   EXEC<br>执行所有事务块内的命令。<br>   MULTI<br>标记一个事务块的开始。<br>   UNWATCH<br>取消 WATCH 命令对所有 key 的监视。<br>   WATCH key [key …]<br>监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。</p>
+<p>十、Redis 脚本命令<br>   EVAL script numkeys key [key …] arg [arg …]<br>执行 Lua 脚本。<br>   EVALSHA sha1 numkeys key [key …] arg [arg …]<br>执行 Lua 脚本。<br>   SCRIPT EXISTS script [script …]<br>查看指定的脚本是否已经被保存在缓存当中。<br>   SCRIPT FLUSH<br>从脚本缓存中移除所有脚本。<br>   SCRIPT KILL<br>杀死当前正在运行的 Lua 脚本。<br>   SCRIPT LOAD script<br>将脚本 script 添加到脚本缓存中，但并不立即执行这个脚本。</p>
+<p>十一、Redis 服务器命令<br>   BGREWRITEAOF<br>异步执行一个 AOF（AppendOnly File） 文件重写操作<br>   BGSAVE<br>在后台异步保存当前数据库的数据到磁盘<br>   CLIENT KILL [ip:port] [ID client-id]<br>关闭客户端连接<br>   CLIENT LIST<br>获取连接到服务器的客户端连接列表<br>   CLIENT GETNAME<br>获取连接的名称<br>   CLIENT PAUSE timeout<br>在指定时间内终止运行来自客户端的命令<br>   CLIENT SETNAME connection-name<br>设置当前连接的名称<br>   CLUSTER SLOTS<br>获取集群节点的映射数组<br>   COMMAND<br>获取 Redis 命令详情数组<br>   COMMAND COUNT<br>获取 Redis 命令总数<br>   COMMAND GETKEYS<br>获取给定命令的所有键<br>   TIME<br>返回当前服务器时间<br>   COMMAND INFO command-name [command-name …]<br>获取指定 Redis 命令描述的数组<br>   CONFIG GET parameter<br>获取指定配置参数的值<br>   CONFIG REWRITE<br>对启动 Redis 服务器时所指定的 redis.conf 配置文件进行改写<br>   CONFIG SET parameter value<br>修改 redis 配置参数，无需重启<br>   CONFIG RESETSTAT<br>重置 INFO 命令中的某些统计数据<br>   DBSIZE<br>返回当前数据库的 key 的数量<br>   DEBUG OBJECT key<br>获取 key 的调试信息<br>   DEBUG SEGFAULT<br>让 Redis 服务崩溃<br>   FLUSHALL<br>删除所有数据库的所有key<br>   FLUSHDB<br>删除当前数据库的所有key<br>   INFO [section]<br>获取 Redis 服务器的各种信息和统计数值<br>   LASTSAVE<br>返回最近一次 Redis 成功将数据保存到磁盘上的时间，以 UNIX 时间戳格式表示<br>   MONITOR<br>实时打印出 Redis 服务器接收到的命令，调试用<br>   ROLE<br>返回主从实例所属的角色<br>   SAVE<br>同步保存数据到硬盘<br>   SHUTDOWN [NOSAVE] [SAVE]<br>异步保存数据到硬盘，并关闭服务器<br>   SLAVEOF host port<br>将当前服务器转变为指定服务器的从属服务器(slave server)<br>   SLOWLOG subcommand [argument]<br>管理 redis 的慢日志<br>   SYNC </p>
+
       
 
       
