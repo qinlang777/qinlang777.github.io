@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Hexo个人博客</title>
+  <title>RSA 加解密 | Hexo个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo个人博客">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="介绍随着Internet网的广泛应用，信息安全问题日益突出，以数据加密技术为核心的信息安全技术也得到了极大的发展….">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RSA 加解密">
+<meta property="og:url" content="http://yoursite.com/2020/01/16/%E9%9A%8F%E7%AC%94/RSA%E5%8A%A0%E8%A7%A3%E5%AF%86/index.html">
 <meta property="og:site_name" content="Hexo个人博客">
+<meta property="og:description" content="介绍随着Internet网的广泛应用，信息安全问题日益突出，以数据加密技术为核心的信息安全技术也得到了极大的发展….">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-16T04:20:58.000Z">
+<meta property="article:modified_time" content="2020-01-16T16:02:26.884Z">
 <meta property="article:author" content="秦朗">
 <meta name="twitter:card" content="summary">
   
@@ -150,16 +154,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-随笔/RSA加解密" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-随笔/RSA加解密" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/16/%E9%9A%8F%E7%AC%94/RSA%E5%8A%A0%E8%A7%A3%E5%AF%86/">RSA 加解密</a>
+    <h1 class="article-title" itemprop="name">
+      RSA 加解密
     </h1>
   
 
@@ -176,9 +178,46 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>随着Internet网的广泛应用，信息安全问题日益突出，以数据加密技术为核心的信息安全技术也得到了极大的发展….</p>
-        
+<a id="more"></a>
+<p>目前的数据加密技术根据加密密钥类型可分私钥加密（对称加密）系统和公钥加密（非对称加密）系统。对称加密算法是较传统的加密体制，<br>通信双方在加/解密过程中使用他们共享的单一密钥，鉴于其算法简单和加密速度快的优点，目前仍然是主流的密码体制之一。<br>最常用的对称密码算法是数据加密标准（DES）算法，但是由于DES密钥长度较短，已经不适合当今分布式开放网络对数据加密安全性的要求。<br>最后，一种新的基于Rijndael算法对称高级数据加密标准AES取代了数据加密标准DES。<br>非对称加密由于加/解密钥不同（公钥加密，私钥解密），密钥管理简单，也得到广泛应用。RSA是非对称加密系统最著名的公钥密码算法。</p>
+<h2 id="加密流程"><a href="#加密流程" class="headerlink" title="加密流程"></a>加密流程</h2><p>1.客户端client和服务端server各自生生成自己的密钥对<br>2.client和server互换公钥<br>3.client生成AES密钥aesKey<br>4.使用自己的RSA私钥对请求明文params进行数字签名<br>5.将数字签名放入请求参数中，生成json格式<br>6.使用aesKey对json加密，得到加密请求报文data<br>7.使用server的RSA公钥对AES加密得到encrypKey<br>8.将encrypKey和data传给server</p>
+<h3 id="生成密钥对"><a href="#生成密钥对" class="headerlink" title="生成密钥对"></a>生成密钥对</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 生成密钥对</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, String&gt; <span class="title">generateKeyPair</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">	<span class="comment">/** RSA算法要求有一个可信任的随机数源 */</span></span><br><span class="line">	SecureRandom sr = <span class="keyword">new</span> SecureRandom();</span><br><span class="line">	<span class="comment">/** 为RSA算法创建一个KeyPairGenerator对象 */</span></span><br><span class="line">	KeyPairGenerator kpg = KeyPairGenerator.getInstance(<span class="string">"RSA"</span>);</span><br><span class="line">	<span class="comment">/** 利用上面的随机数据源初始化这个KeyPairGenerator对象 */</span></span><br><span class="line">	kpg.initialize(<span class="number">2048</span>, sr);</span><br><span class="line">	<span class="comment">/** 生成密匙对 */</span></span><br><span class="line">	KeyPair kp = kpg.generateKeyPair();</span><br><span class="line">	<span class="comment">/** 得到公钥 */</span></span><br><span class="line">	Key publicKey = kp.getPublic();</span><br><span class="line">	<span class="keyword">byte</span>[] publicKeyBytes = publicKey.getEncoded();</span><br><span class="line">	String pub = <span class="keyword">new</span> String(Base64.encodeBase64(publicKeyBytes),</span><br><span class="line">			<span class="string">"UTF-8"</span>);</span><br><span class="line">	<span class="comment">/** 得到私钥 */</span></span><br><span class="line">	Key privateKey = kp.getPrivate();</span><br><span class="line">	<span class="keyword">byte</span>[] privateKeyBytes = privateKey.getEncoded();</span><br><span class="line">	String pri = <span class="keyword">new</span> String(Base64.encodeBase64(privateKeyBytes),</span><br><span class="line">			<span class="string">"UTF-8"</span>);</span><br><span class="line">	Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">	map.put(<span class="string">"publicKey"</span>, pub);</span><br><span class="line">	map.put(<span class="string">"privateKey"</span>, pri);</span><br><span class="line">	RSAPublicKey rsp = (RSAPublicKey) kp.getPublic();</span><br><span class="line">	BigInteger bint = rsp.getModulus();</span><br><span class="line">	<span class="keyword">byte</span>[] b = bint.toByteArray();</span><br><span class="line">	<span class="keyword">byte</span>[] deBase64Value = Base64.encodeBase64(b);</span><br><span class="line">	String retValue = <span class="keyword">new</span> String(deBase64Value);</span><br><span class="line">	map.put(<span class="string">"modulus"</span>, retValue);</span><br><span class="line">	<span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="生成AES密钥"><a href="#生成AES密钥" class="headerlink" title="生成AES密钥"></a>生成AES密钥</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 生成AES密钥</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] genarateRandomKey() &#123;</span><br><span class="line">     KeyGenerator keygen = <span class="keyword">null</span>;</span><br><span class="line">     <span class="keyword">try</span> &#123;</span><br><span class="line">         keygen = KeyGenerator.getInstance(<span class="string">"AES/CBC/PKCS5Padding"</span>);</span><br><span class="line">     &#125; <span class="keyword">catch</span> (NoSuchAlgorithmException e) &#123;</span><br><span class="line">         <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">" genarateRandomKey fail!"</span>, e);</span><br><span class="line">     &#125;</span><br><span class="line">     SecureRandom random = <span class="keyword">new</span> SecureRandom();</span><br><span class="line">     keygen.init(random);</span><br><span class="line">     Key key = keygen.generateKey();</span><br><span class="line">     <span class="keyword">return</span> key.getEncoded();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用自己的RSA私钥对请求明文params进行数字签名"><a href="#使用自己的RSA私钥对请求明文params进行数字签名" class="headerlink" title="使用自己的RSA私钥对请求明文params进行数字签名"></a>使用自己的RSA私钥对请求明文params进行数字签名</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 加签</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> content</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> privateKey</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">sign</span><span class="params">(String content, String privateKey)</span> </span>&#123;</span><br><span class="line">	String charset = <span class="string">"UTF-8"</span>;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		PKCS8EncodedKeySpec priPKCS8 = <span class="keyword">new</span> PKCS8EncodedKeySpec(</span><br><span class="line">				Base64.decodeBase64(privateKey.getBytes()));</span><br><span class="line">		KeyFactory keyf = KeyFactory.getInstance(<span class="string">"RSA"</span>);</span><br><span class="line">		PrivateKey priKey = keyf.generatePrivate(priPKCS8);</span><br><span class="line">		Signature signature = Signature.getInstance(<span class="string">"SHA256WithRSA"</span>);</span><br><span class="line">		signature.initSign(priKey);</span><br><span class="line">		signature.update(content.getBytes(charset));</span><br><span class="line">		<span class="keyword">byte</span>[] signed = signature.sign();</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> String(Base64.encodeBase64(signed));</span><br><span class="line">	&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="将数字签名放入请求参数中，生成json格式"><a href="#将数字签名放入请求参数中，生成json格式" class="headerlink" title="将数字签名放入请求参数中，生成json格式"></a>将数字签名放入请求参数中，生成json格式</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">params.put(<span class="string">"sign"</span>, sign);</span><br><span class="line">String info = JSON.toJSONString(params);</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用aesKey对json加密，得到加密请求报文data"><a href="#使用aesKey对json加密，得到加密请求报文data" class="headerlink" title="使用aesKey对json加密，得到加密请求报文data"></a>使用aesKey对json加密，得到加密请求报文data</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 加密</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> data 需要加密的内容</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> key  加密密码</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] encrypt(<span class="keyword">byte</span>[] data, <span class="keyword">byte</span>[] key) &#123;</span><br><span class="line">       <span class="keyword">if</span> (data == <span class="keyword">null</span>)&#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException( <span class="string">"data must be specified"</span>);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span> (key == <span class="keyword">null</span>)&#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException( <span class="string">"key must be specified"</span>);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span> (key.length != <span class="number">16</span>) &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Invalid AES key length (must be 16 bytes)"</span>);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           SecretKeySpec secretKey = <span class="keyword">new</span> SecretKeySpec(key, <span class="string">"AES"</span>);</span><br><span class="line">           <span class="keyword">byte</span>[] enCodeFormat = secretKey.getEncoded();</span><br><span class="line">           SecretKeySpec seckey = <span class="keyword">new</span> SecretKeySpec(enCodeFormat, <span class="string">"AES"</span>);</span><br><span class="line">           <span class="comment">// 创建密码器</span></span><br><span class="line">           Cipher cipher = Cipher.getInstance(<span class="string">"AES/CBC/PKCS5Padding"</span>);</span><br><span class="line">           <span class="comment">//使用CBC模式，需要一个向量iv，可增加加密算法的强度</span></span><br><span class="line">           IvParameterSpec iv = <span class="keyword">new</span> IvParameterSpec(key);</span><br><span class="line">           <span class="comment">// 初始化</span></span><br><span class="line">           cipher.init(<span class="number">1</span>, seckey, iv);</span><br><span class="line">           <span class="keyword">byte</span>[] result = cipher.doFinal(data);</span><br><span class="line">           <span class="comment">// 加密</span></span><br><span class="line">           <span class="keyword">return</span> result;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"encrypt fail!"</span>, e);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用server的RSA公钥对AES加密得到encrypKey"><a href="#使用server的RSA公钥对AES加密得到encrypKey" class="headerlink" title="使用server的RSA公钥对AES加密得到encrypKey"></a>使用server的RSA公钥对AES加密得到encrypKey</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 加密 source： 源数据</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">encrypt</span><span class="params">(String source, String publicKey)</span></span></span><br><span class="line"><span class="function">		<span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">	Key key = getPublicKey(publicKey);</span><br><span class="line">	<span class="comment">/** 得到Cipher对象来实现对源数据的RSA加密 */</span></span><br><span class="line">	Cipher cipher = Cipher.getInstance(<span class="string">"RSA/ECB/PKCS1Padding"</span>);</span><br><span class="line">	cipher.init(<span class="number">1</span>, key);</span><br><span class="line">	<span class="keyword">byte</span>[] b = source.getBytes();</span><br><span class="line">	<span class="comment">/** 执行加密操作 */</span></span><br><span class="line">	<span class="keyword">byte</span>[] b1 = cipher.doFinal(b);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> String(encodeBase64(b1, <span class="keyword">false</span>),</span><br><span class="line">			<span class="string">"UTF-8"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后将encrypKey和data传给server</p>
+
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -187,16 +226,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/01/16/%E9%9A%8F%E7%AC%94/RSA%E5%8A%A0%E8%A7%A3%E5%AF%86/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/01/16/%E9%9A%8F%E7%AC%94/RSA%E5%8A%A0%E8%A7%A3%E5%AF%86/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2020/01/13/redis/redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">redis常用命令</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -216,206 +314,14 @@
 
 
 
-
-  
-    <article id="post-redis/redis常用命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/13/redis/redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">redis常用命令</a>
-    </h1>
   
 
-        
-        <a href="/2020/01/13/redis/redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="archive-article-date">
-  	<time datetime="2020-01-13T13:53:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-13</time>
-</a>
-        
-      </header>
-          <!-- 目录内容 -->
-          
-          <!-- 目录内容结束 -->
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>redis 使用的常用操作命令…</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/01/13/redis/redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-redis/redis常用配置参数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/13/redis/redis%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0/">redis常用配置参数</a>
-    </h1>
   
 
-        
-        <a href="/2020/01/13/redis/redis%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2020-01-13T10:43:28.169Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-13</time>
-</a>
-        
-      </header>
-          <!-- 目录内容 -->
-          
-          <!-- 目录内容结束 -->
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>redis.conf 配置项说明如下：</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/01/13/redis/redis%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-随笔/优雅的对象集合转换" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/11/%E9%9A%8F%E7%AC%94/%E4%BC%98%E9%9B%85%E7%9A%84%E5%AF%B9%E8%B1%A1%E9%9B%86%E5%90%88%E8%BD%AC%E6%8D%A2/">优雅的对象集合转换</a>
-    </h1>
   
 
-        
-        <a href="/2020/01/11/%E9%9A%8F%E7%AC%94/%E4%BC%98%E9%9B%85%E7%9A%84%E5%AF%B9%E8%B1%A1%E9%9B%86%E5%90%88%E8%BD%AC%E6%8D%A2/" class="archive-article-date">
-  	<time datetime="2020-01-11T10:13:24.038Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-11</time>
-</a>
-        
-      </header>
-          <!-- 目录内容 -->
-          
-          <!-- 目录内容结束 -->
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在实际的应用场景中，经常会遇到需要 <strong>将另一个对象的集合转化为另一个集合的对象</strong> 的需求</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/01/11/%E9%9A%8F%E7%AC%94/%E4%BC%98%E9%9B%85%E7%9A%84%E5%AF%B9%E8%B1%A1%E9%9B%86%E5%90%88%E8%BD%AC%E6%8D%A2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
+
   
 
 
@@ -438,8 +344,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
